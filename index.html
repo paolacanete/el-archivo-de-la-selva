@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>El Archivo de la Selva — Caso 1: La Noche del Mirador</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+/* ============================================================
+   EL ARCHIVO DE LA SELVA — Caso 1: La Noche del Mirador
+   Estética: noir selvático · expediente premium
+   ============================================================ */
+
+:root{
+  --negro:#070a08;
+  --negro-2:#0c110d;
+  --selva:#0f1a12;
+  --selva-2:#14241a;
+  --verde-tenue:#1d3325;
+  --dorado:#c9a44c;
+  --dorado-claro:#e6c878;
+  --dorado-tenue:#6e5c2e;
+  --hueso:#ece6d6;
+  --hueso-tenue:#b8b09c;
+  --rojo:#8c3b2a;
+  --rojo-claro:#b8543d;
+  --niebla:#6f7a72;
+  --linea:rgba(201,164,76,.32);
+  --linea-fina:rgba(201,164,76,.16);
+  --sombra:0 18px 50px rgba(0,0,0,.65);
+  --serif:'Cormorant Garamond','Playfair Display',Georgia,'Times New Roman',serif;
+  --sans:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);
+  color:var(--hueso);
+  background:var(--negro);
+  background-image:
+    radial-gradient(ellipse at 50% -10%, rgba(29,51,37,.55), transparent 60%),
+    radial-gradient(ellipse at 90% 110%, rgba(140,59,42,.10), transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  line-height:1.6;
+  min-height:100vh;
+  overflow-x:hidden;
+  -webkit-tap-highlight-color:transparent;
+}
+img{max-width:100%;display:block}
+
+/* ---------- TIPOGRAFÍA ---------- */
+h1,h2,h3,.serif{font-family:var(--serif)}
+.eyebrow{
+  font-size:.72rem;letter-spacing:.42em;text-transform:uppercase;
+  color:var(--dorado);font-weight:500;margin-bottom:.9rem;
+}
+.titulo-seccion{
+  font-size:clamp(1.9rem,5vw,3rem);font-weight:600;line-height:1.05;
+  letter-spacing:.01em;color:var(--hueso);
+}
+.sub-seccion{color:var(--hueso-tenue);font-size:1.02rem;max-width:60ch;margin-top:.7rem}
+.atmosfera{
+  font-family:var(--serif);font-style:italic;font-size:clamp(1.05rem,2.4vw,1.4rem);
+  color:var(--dorado-claro);opacity:.92;
+}
+
+/* ---------- LÍNEAS DORADAS ---------- */
+.sep{height:1px;background:linear-gradient(90deg,transparent,var(--dorado),transparent);
+  opacity:.4;margin:2.2rem 0;border:0}
+.sep-corto{width:64px;height:2px;background:var(--dorado);opacity:.7;margin:1.1rem 0;border:0}
+
+/* ---------- LAYOUT ---------- */
+#app{max-width:1080px;margin:0 auto;padding:0 18px 120px;position:relative}
+.scene{display:none;animation:fade .7s ease both}
+.scene.activa{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.scene-pad{padding-top:96px}
+
+/* ---------- BARRA SUPERIOR ---------- */
+#topbar{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  display:none;align-items:center;justify-content:space-between;gap:12px;
+  padding:10px 16px;
+  background:linear-gradient(180deg,rgba(7,10,8,.97),rgba(7,10,8,.82));
+  border-bottom:1px solid var(--linea-fina);
+  backdrop-filter:blur(8px);
+}
+#topbar.visible{display:flex}
+.brand{font-family:var(--serif);font-size:1.05rem;letter-spacing:.18em;color:var(--dorado);
+  text-transform:uppercase;white-space:nowrap;cursor:pointer}
+.brand small{display:block;font-size:.6rem;letter-spacing:.3em;color:var(--hueso-tenue)}
+.fases{display:flex;gap:6px;align-items:center}
+.fase{
+  width:30px;height:30px;border:1px solid var(--linea);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-family:var(--serif);
+  font-size:.8rem;color:var(--hueso-tenue);background:rgba(20,36,26,.5);transition:.3s;
+}
+.fase.on{color:var(--negro);background:var(--dorado);border-color:var(--dorado-claro);
+  box-shadow:0 0 14px rgba(201,164,76,.5)}
+.fase.done{color:var(--dorado);border-color:var(--dorado)}
+.menu-btn{background:none;border:1px solid var(--linea);color:var(--dorado);
+  padding:8px 12px;border-radius:6px;font-size:1.1rem;cursor:pointer;line-height:1}
+
+/* ---------- MENÚ LATERAL ---------- */
+#menu{
+  position:fixed;inset:0;z-index:80;background:rgba(4,7,5,.78);backdrop-filter:blur(4px);
+  display:none;
+}
+#menu.abierto{display:block;animation:fade .3s ease}
+.menu-panel{
+  position:absolute;top:0;right:0;height:100%;width:min(320px,86vw);
+  background:linear-gradient(180deg,var(--selva),var(--negro-2));
+  border-left:1px solid var(--linea);padding:28px 22px;overflow-y:auto;
+  box-shadow:var(--sombra);animation:slidein .35s ease both;
+}
+@keyframes slidein{from{transform:translateX(40px);opacity:.4}to{transform:none;opacity:1}}
+.menu-panel h3{color:var(--dorado);letter-spacing:.2em;text-transform:uppercase;
+  font-size:.8rem;margin-bottom:18px}
+.menu-link{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--linea-fina);
+  color:var(--hueso);padding:13px 4px;font-family:var(--serif);font-size:1.12rem;
+  cursor:pointer;transition:.25s;
+}
+.menu-link:hover{color:var(--dorado-claro);padding-left:10px}
+.menu-link .num{font-size:.7rem;color:var(--dorado-tenue);font-family:var(--sans);letter-spacing:.1em}
+.menu-link.lock{opacity:.4;cursor:not-allowed}
+.menu-cerrar{position:absolute;top:18px;left:18px;background:none;border:1px solid var(--linea);
+  color:var(--dorado);width:40px;height:40px;border-radius:50%;font-size:1.2rem;cursor:pointer}
+
+/* ---------- BOTONES ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-family:var(--sans);font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  font-size:.82rem;padding:15px 30px;border-radius:4px;cursor:pointer;border:1px solid var(--dorado);
+  background:linear-gradient(180deg,rgba(201,164,76,.16),rgba(201,164,76,.04));
+  color:var(--dorado-claro);transition:.3s;position:relative;overflow:hidden;
+}
+.btn:hover{background:var(--dorado);color:var(--negro);box-shadow:0 0 26px rgba(201,164,76,.35);
+  transform:translateY(-1px)}
+.btn.primario{font-size:.92rem;padding:18px 40px}
+.btn.ghost{border-color:var(--linea);color:var(--hueso-tenue);background:transparent}
+.btn.ghost:hover{border-color:var(--dorado);color:var(--dorado);background:rgba(201,164,76,.08);box-shadow:none}
+.btn.rojo{border-color:var(--rojo-claro);color:#e8a692;
+  background:linear-gradient(180deg,rgba(140,59,42,.22),rgba(140,59,42,.06))}
+.btn.rojo:hover{background:var(--rojo);color:var(--hueso);box-shadow:0 0 24px rgba(184,84,61,.4)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;background:transparent;color:var(--hueso-tenue)}
+.nav-acciones{display:flex;flex-wrap:wrap;gap:14px;margin-top:2.6rem}
+
+/* ---------- PORTADA ---------- */
+#portada.activa{min-height:100vh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:60px 20px;position:relative}
+.portada-marco{
+  border:1px solid var(--linea);border-radius:8px;padding:clamp(34px,7vw,72px) clamp(22px,6vw,68px);
+  max-width:680px;width:100%;position:relative;
+  background:linear-gradient(180deg,rgba(15,26,18,.78),rgba(7,10,8,.9));
+  box-shadow:var(--sombra),inset 0 0 60px rgba(0,0,0,.5);
+}
+.portada-marco::before,.portada-marco::after{
+  content:'';position:absolute;width:26px;height:26px;border:2px solid var(--dorado);opacity:.7}
+.portada-marco::before{top:12px;left:12px;border-right:0;border-bottom:0}
+.portada-marco::after{bottom:12px;right:12px;border-left:0;border-top:0}
+.sello{
+  font-size:.62rem;letter-spacing:.5em;text-transform:uppercase;color:var(--dorado-tenue);
+  border:1px solid var(--linea-fina);display:inline-block;padding:6px 16px;border-radius:30px;margin-bottom:30px}
+.titulo-juego{
+  font-size:clamp(2.4rem,9vw,4.6rem);font-weight:700;line-height:.96;letter-spacing:.02em;
+  color:var(--hueso);text-shadow:0 4px 30px rgba(0,0,0,.7);
+}
+.titulo-juego .verde{display:block;color:var(--dorado-claro);font-style:italic;font-weight:500;
+  font-size:.5em;letter-spacing:.04em;margin-top:.3em}
+.caso-tag{margin-top:1.6rem;font-family:var(--sans);letter-spacing:.34em;text-transform:uppercase;
+  font-size:.78rem;color:var(--hueso-tenue)}
+.frase-portada{margin:2rem auto 0;max-width:38ch}
+.modo-sel{display:flex;gap:14px;justify-content:center;margin-top:2.6rem;flex-wrap:wrap}
+.modo-chip{
+  flex:1 1 200px;max-width:240px;border:1px solid var(--linea);border-radius:6px;padding:18px;
+  cursor:pointer;transition:.3s;background:rgba(20,36,26,.4);text-align:center}
+.modo-chip:hover{border-color:var(--dorado);background:rgba(201,164,76,.1)}
+.modo-chip.sel{border-color:var(--dorado-claro);background:rgba(201,164,76,.16);
+  box-shadow:0 0 20px rgba(201,164,76,.25)}
+.modo-chip .mt{font-family:var(--serif);font-size:1.3rem;color:var(--dorado-claro)}
+.modo-chip .md{font-size:.78rem;color:var(--hueso-tenue);margin-top:4px}
+
+/* ---------- TARJETAS / EXPEDIENTE ---------- */
+.tarjeta{
+  border:1px solid var(--linea);border-radius:8px;
+  background:linear-gradient(170deg,rgba(20,36,26,.72),rgba(12,17,13,.9));
+  box-shadow:var(--sombra);padding:26px;position:relative;overflow:hidden;
+}
+.tarjeta::before{content:'';position:absolute;inset:0;pointer-events:none;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.05'/%3E%3C/svg%3E")}
+.expediente-head{display:flex;justify-content:space-between;align-items:flex-start;
+  flex-wrap:wrap;gap:14px;border-bottom:1px solid var(--linea-fina);padding-bottom:18px;margin-bottom:20px}
+.estampa{font-family:var(--sans);font-size:.66rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--rojo-claro);border:1px solid var(--rojo-claro);padding:6px 12px;border-radius:4px;
+  transform:rotate(-3deg);opacity:.85}
+.dato-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:18px}
+.dato{border-left:2px solid var(--dorado-tenue);padding-left:12px}
+.dato .k{font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dorado);margin-bottom:3px}
+.dato .v{color:var(--hueso);font-size:.98rem}
+
+/* texto narrativo */
+.relato{font-family:var(--serif);font-size:clamp(1.05rem,2.3vw,1.22rem);line-height:1.75;
+  color:var(--hueso);max-width:64ch}
+.relato p{margin-bottom:1.1rem}
+.relato .voz{color:var(--dorado-claro);font-style:italic}
+.reveal{opacity:1;transform:none}
+.reveal.in{opacity:1;transform:none}
+.img-rota{display:flex !important;align-items:center;justify-content:center;
+  background:repeating-linear-gradient(45deg,#1d3325,#1d3325 10px,#16241a 10px,#16241a 20px);
+  color:var(--rojo-claro);font-family:var(--sans);font-size:.7rem;line-height:1.3;
+  text-align:center;padding:10px;min-height:120px;word-break:break-word}
+
+/* ---------- VIDEOS ---------- */
+.video-card{margin-bottom:28px}
+.video-card .vc-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.video-card .vc-num{font-family:var(--serif);font-size:1.5rem;color:var(--dorado)}
+.video-card .vc-lab{font-size:.7rem;letter-spacing:.26em;text-transform:uppercase;color:var(--hueso-tenue)}
+.video-wrap{position:relative;border:1px solid var(--linea);border-radius:8px;overflow:hidden;
+  background:#000;box-shadow:var(--sombra);aspect-ratio:16/9}
+.video-wrap video{width:100%;height:100%;object-fit:cover;display:block;background:#000}
+.video-narr{font-family:var(--serif);font-style:italic;color:var(--dorado-claro);
+  margin-top:14px;font-size:1.08rem;line-height:1.6}
+.video-fallback{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:24px;color:var(--hueso-tenue);font-size:.85rem;background:var(--selva)}
+
+/* ---------- REPRODUCTOR DE REGISTROS ---------- */
+.registro-card{border:1px solid var(--linea);border-radius:10px;overflow:hidden;
+  background:linear-gradient(180deg,rgba(20,36,26,.6),rgba(12,17,13,.92));box-shadow:var(--sombra)}
+.registro-info{padding:20px 22px 24px}
+.registro-meta{display:flex;align-items:baseline;gap:8px 16px;flex-wrap:wrap;margin-bottom:10px}
+.registro-contador{font-size:.7rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dorado)}
+.registro-titulo{font-family:var(--serif);font-size:clamp(1.4rem,4vw,1.8rem);color:var(--hueso);line-height:1.1}
+.registro-frase{font-family:var(--serif);font-style:italic;color:var(--dorado-claro);
+  font-size:1.1rem;line-height:1.6;margin-bottom:20px;max-width:60ch}
+.registro-controles{display:flex;gap:12px;flex-wrap:wrap}
+.registro-controles .btn{flex:1 1 auto}
+.registro-puntos{display:flex;gap:8px;margin-top:18px;justify-content:center}
+.registro-puntos i{width:9px;height:9px;border-radius:50%;border:1px solid var(--dorado);
+  background:transparent;transition:.3s}
+.registro-puntos i.on{background:var(--dorado);box-shadow:0 0 10px rgba(201,164,76,.6)}
+@media(max-width:640px){.registro-controles .btn{flex:1 1 100%}}
+
+/* lista de sospechas (fichas personaje) */
+.lista-sosp{list-style:none;margin-top:6px}
+.lista-sosp li{padding:7px 0 7px 18px;position:relative;color:var(--hueso-tenue);
+  font-size:.95rem;border-bottom:1px solid var(--linea-fina)}
+.lista-sosp li:last-child{border-bottom:0}
+.lista-sosp li::before{content:'›';position:absolute;left:0;color:var(--dorado);font-weight:700}
+
+/* ---------- GRID PERSONAJES / LUGARES / OBJETOS ---------- */
+.grid{display:grid;gap:20px}
+.grid.cols-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.grid.cols-3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.ficha{
+  border:1px solid var(--linea);border-radius:8px;overflow:hidden;cursor:pointer;
+  background:linear-gradient(180deg,rgba(20,36,26,.7),rgba(12,17,13,.92));
+  transition:.35s;box-shadow:var(--sombra);display:flex;flex-direction:column}
+.ficha:hover{transform:translateY(-4px);border-color:var(--dorado);
+  box-shadow:0 22px 56px rgba(0,0,0,.7),0 0 22px rgba(201,164,76,.18)}
+.ficha-img{aspect-ratio:4/5;overflow:hidden;position:relative;background:var(--selva)}
+.ficha.lugar .ficha-img,.ficha.objeto .ficha-img{aspect-ratio:16/10}
+.ficha-img img{width:100%;height:100%;object-fit:cover;transition:.6s;filter:saturate(.85) contrast(1.05)}
+.ficha:hover .ficha-img img{transform:scale(1.06)}
+.ficha-img::after{content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 40%,rgba(7,10,8,.92))}
+.ficha-cuerpo{padding:16px 18px 20px;position:relative;margin-top:-46px;z-index:2}
+.ficha-cuerpo .rol{font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:var(--dorado)}
+.ficha-cuerpo .nombre{font-family:var(--serif);font-size:1.5rem;color:var(--hueso);line-height:1.1;margin:2px 0 8px}
+.ficha-cuerpo .mini{font-size:.86rem;color:var(--hueso-tenue)}
+.ficha-cuerpo .ver{margin-top:12px;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dorado-claro)}
+
+/* ---------- EVIDENCIAS ---------- */
+.ev-grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.ev-card{
+  border:1px solid var(--linea);border-radius:8px;cursor:pointer;padding:0;overflow:hidden;
+  background:linear-gradient(180deg,rgba(20,36,26,.7),rgba(12,17,13,.92));transition:.3s;position:relative;
+  display:flex;flex-direction:column;min-height:150px}
+.ev-card:hover{border-color:var(--dorado);transform:translateY(-3px)}
+.ev-card.leida{border-color:var(--dorado-tenue)}
+.ev-num{position:absolute;top:10px;left:12px;font-family:var(--serif);font-size:1.1rem;color:var(--dorado);
+  background:rgba(7,10,8,.7);padding:2px 10px;border:1px solid var(--linea-fina);border-radius:30px;z-index:3}
+.ev-leida-tag{position:absolute;top:10px;right:10px;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--dorado-claro);background:rgba(7,10,8,.7);padding:4px 8px;border-radius:4px;display:none;z-index:3}
+.ev-card.leida .ev-leida-tag{display:block}
+.ev-thumb{height:120px;background:var(--selva);overflow:hidden}
+.ev-thumb img{width:100%;height:100%;object-fit:cover;filter:saturate(.85)}
+.ev-tipo-icon{height:120px;display:flex;align-items:center;justify-content:center;font-size:2.4rem;
+  background:radial-gradient(circle at 50% 40%,rgba(29,51,37,.9),rgba(12,17,13,.95))}
+.ev-body{padding:14px 16px 16px}
+.ev-body .et{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dorado)}
+.ev-body .en{font-family:var(--serif);font-size:1.16rem;color:var(--hueso);line-height:1.15;margin-top:3px}
+
+/* ---------- PISTAS ---------- */
+.pistas-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.pista{border:1px solid var(--linea);border-radius:8px;padding:18px 20px;display:flex;gap:16px;
+  background:linear-gradient(140deg,rgba(20,36,26,.65),rgba(12,17,13,.9))}
+.pista .pn{font-family:var(--serif);font-size:1.8rem;color:var(--dorado-tenue);line-height:1}
+.pista .pt{color:var(--hueso);font-size:.98rem}
+
+/* ---------- TABLERO ---------- */
+.tablero-bloque{margin-bottom:36px}
+.tablero-titulo{font-family:var(--serif);font-size:1.3rem;color:var(--dorado-claro);margin-bottom:6px}
+.tablero-hint{font-size:.82rem;color:var(--hueso-tenue);margin-bottom:16px}
+.tabla-scroll{overflow-x:auto;border:1px solid var(--linea-fina);border-radius:8px;
+  -webkit-overflow-scrolling:touch}
+table.deduccion{border-collapse:collapse;width:100%;min-width:420px}
+table.deduccion th,table.deduccion td{border:1px solid var(--linea-fina);text-align:center;padding:0}
+table.deduccion thead th{
+  background:rgba(15,26,18,.95);color:var(--dorado);font-family:var(--sans);font-weight:500;
+  font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;padding:12px 8px;position:sticky;top:0}
+table.deduccion th.esquina{background:var(--negro-2)}
+table.deduccion tbody th{
+  background:rgba(15,26,18,.9);color:var(--hueso);font-family:var(--serif);font-size:1.02rem;
+  text-align:left;padding:12px 14px;white-space:nowrap}
+table.deduccion td.celda-td{padding:0;cursor:pointer}
+.celda{display:flex;align-items:center;justify-content:center;width:100%;height:100%;
+  min-width:56px;min-height:62px;cursor:pointer;font-size:1.5rem;font-family:var(--serif);
+  transition:.18s;user-select:none;background:rgba(12,17,13,.5)}
+td.celda-td:hover .celda,.celda:hover{background:rgba(201,164,76,.12)}
+.celda.x{color:var(--rojo-claro)}
+.celda.v{color:var(--dorado-claro);background:rgba(201,164,76,.14)}
+.tablero-controles{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.leyenda{display:flex;gap:18px;flex-wrap:wrap;font-size:.8rem;color:var(--hueso-tenue);margin-top:14px}
+.leyenda span b{color:var(--dorado-claro)}
+.aclara{font-size:.78rem;color:var(--niebla);margin-top:6px;font-style:italic}
+
+/* ---------- ACUSACIÓN ---------- */
+.acu-bloque{margin-bottom:30px}
+.acu-bloque h3{font-family:var(--serif);font-size:1.35rem;color:var(--dorado-claro);margin-bottom:14px}
+.opciones{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.opcion{border:1px solid var(--linea);border-radius:6px;padding:16px;cursor:pointer;transition:.25s;
+  background:rgba(20,36,26,.45);font-family:var(--serif);font-size:1.12rem;color:var(--hueso);text-align:center}
+.opcion:hover{border-color:var(--dorado);background:rgba(201,164,76,.08)}
+.opcion.sel{border-color:var(--dorado-claro);background:rgba(201,164,76,.18);color:var(--dorado-claro);
+  box-shadow:0 0 18px rgba(201,164,76,.25)}
+
+/* ---------- REVELACIÓN ---------- */
+.revel{position:relative;border:1px solid var(--linea);border-radius:10px;overflow:hidden;
+  box-shadow:var(--sombra)}
+.revel-img{position:absolute;inset:0;z-index:0}
+.revel-img img{width:100%;height:100%;object-fit:cover;filter:saturate(.7) brightness(.4)}
+.revel-grad{position:absolute;inset:0;z-index:1;
+  background:linear-gradient(180deg,rgba(7,10,8,.7),rgba(7,10,8,.93))}
+.revel-cont{position:relative;z-index:2;padding:clamp(30px,7vw,64px)}
+.veredicto{font-family:var(--serif);font-size:clamp(2rem,8vw,3.4rem);font-weight:700;letter-spacing:.04em}
+.veredicto.ok{color:var(--dorado-claro)}
+.veredicto.no{color:var(--rojo-claro)}
+.solucion-box{border:1px solid var(--linea);border-radius:8px;padding:18px 20px;margin-top:24px;
+  background:rgba(12,17,13,.6)}
+.solucion-box .sl{display:flex;justify-content:space-between;gap:12px;padding:8px 0;
+  border-bottom:1px solid var(--linea-fina);font-size:.96rem}
+.solucion-box .sl:last-child{border:0}
+.solucion-box .sl .k{color:var(--hueso-tenue);letter-spacing:.06em}
+.solucion-box .sl .v{color:var(--dorado-claro);font-family:var(--serif);font-size:1.15rem;text-align:right}
+
+/* ---------- MODAL ---------- */
+#modal{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;
+  padding:20px;background:rgba(3,5,4,.85);backdrop-filter:blur(6px)}
+#modal.abierto{display:flex;animation:fade .3s ease}
+.modal-card{
+  max-width:760px;width:100%;max-height:90vh;overflow-y:auto;border:1px solid var(--linea);
+  border-radius:10px;background:linear-gradient(180deg,var(--selva-2),var(--negro-2));
+  box-shadow:var(--sombra);animation:slideup .4s ease both;position:relative}
+@keyframes slideup{from{transform:translateY(26px);opacity:.5}to{transform:none;opacity:1}}
+.modal-cerrar{position:sticky;top:0;float:right;margin:14px 14px 0 0;z-index:5;background:rgba(7,10,8,.85);
+  border:1px solid var(--linea);color:var(--dorado);width:42px;height:42px;border-radius:50%;
+  font-size:1.3rem;cursor:pointer;line-height:1}
+.modal-img{width:100%;max-height:48vh;object-fit:cover;border-bottom:1px solid var(--linea)}
+.modal-body{padding:26px 30px 34px}
+.modal-body .rol{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--dorado)}
+.modal-body .nombre{font-family:var(--serif);font-size:clamp(1.7rem,5vw,2.4rem);color:var(--hueso);margin:4px 0 6px}
+.modal-body .frase{font-family:var(--serif);font-style:italic;color:var(--dorado-claro);font-size:1.15rem;
+  border-left:2px solid var(--dorado-tenue);padding-left:14px;margin:16px 0}
+.modal-body p{color:var(--hueso);margin-bottom:12px}
+.modal-body .bloque-sec{margin-top:18px;border-top:1px solid var(--linea-fina);padding-top:16px}
+.modal-body .bloque-sec .lab{font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--rojo-claro);margin-bottom:6px}
+.declar{background:rgba(12,17,13,.6);border:1px solid var(--linea-fina);border-radius:6px;padding:16px;
+  font-family:var(--serif);font-style:italic;color:var(--hueso);font-size:1.08rem}
+
+/* reproductor de audio simulado */
+.audio-sim{display:flex;align-items:center;gap:14px;background:rgba(12,17,13,.7);
+  border:1px solid var(--linea);border-radius:8px;padding:14px 18px;margin:14px 0}
+.audio-play{width:48px;height:48px;border-radius:50%;border:1px solid var(--dorado);color:var(--dorado);
+  background:rgba(201,164,76,.1);cursor:pointer;font-size:1.1rem;flex-shrink:0}
+.audio-play.play{background:var(--dorado);color:var(--negro)}
+.ondas{display:flex;align-items:center;gap:3px;height:40px;flex:1}
+.ondas i{display:block;width:3px;background:var(--dorado-tenue);border-radius:3px;height:30%}
+.audio-sim.activo .ondas i{animation:onda 1s ease-in-out infinite}
+@keyframes onda{0%,100%{height:20%}50%{height:95%}}
+.audio-time{font-size:.78rem;color:var(--hueso-tenue);font-variant-numeric:tabular-nums}
+
+/* ---------- TOAST ---------- */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(30px);
+  background:var(--selva-2);border:1px solid var(--dorado);color:var(--dorado-claro);
+  padding:12px 22px;border-radius:6px;z-index:120;font-size:.86rem;letter-spacing:.05em;
+  opacity:0;transition:.4s;box-shadow:var(--sombra);pointer-events:none;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* progreso lectura evidencias */
+.barra-lectura{height:6px;background:rgba(20,36,26,.6);border-radius:6px;overflow:hidden;margin:18px 0 4px}
+.barra-lectura i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--dorado-tenue),var(--dorado-claro));transition:.5s}
+
+/* nota modo grupo */
+.grupo-box{border:1px dashed var(--linea);border-radius:8px;padding:22px;background:rgba(20,36,26,.4)}
+.grupo-box ul{list-style:none;margin-top:12px}
+.grupo-box li{padding:8px 0;border-bottom:1px solid var(--linea-fina);display:flex;gap:12px}
+.grupo-box li b{color:var(--dorado-claro);min-width:90px;font-family:var(--serif)}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:640px){
+  #app{padding:0 14px 110px}
+  .scene-pad{padding-top:84px}
+  .brand small{display:none}
+  .fase{width:24px;height:24px;font-size:.66rem}
+  .celda{min-width:48px;min-height:54px;font-size:1.25rem}
+  .nav-acciones .btn{flex:1 1 100%}
+  .modal-body{padding:22px 20px 28px}
+  .portada-marco{padding:32px 22px}
+}
+@media (max-width:380px){
+  .fases{gap:4px}
+  .fase{width:21px;height:21px;font-size:.6rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ===================== BARRA SUPERIOR ===================== -->
+<header id="topbar">
+  <div class="brand" onclick="abrirMenu()">El Archivo de la Selva<small>Caso 1 · La Noche del Mirador</small></div>
+  <div class="fases" id="fases"></div>
+  <button class="menu-btn" onclick="abrirMenu()" aria-label="Menú">☰</button>
+</header>
+
+<!-- ===================== MENÚ ===================== -->
+<div id="menu" onclick="if(event.target.id==='menu')cerrarMenu()">
+  <nav class="menu-panel">
+    <button class="menu-cerrar" onclick="cerrarMenu()" aria-label="Cerrar">✕</button>
+    <h3>Expediente</h3>
+    <div id="menu-links"></div>
+    <div class="sep" style="margin:20px 0"></div>
+    <button class="btn ghost" style="width:100%" onclick="reiniciar()">Reiniciar partida</button>
+  </nav>
+</div>
+
+<main id="app">
+
+  <!-- ===================== PORTADA ===================== -->
+  <section id="portada" class="scene activa">
+    <div class="portada-marco reveal">
+      <div class="sello">Expediente confidencial · Misiones</div>
+      <h1 class="titulo-juego">El Archivo<br>de la Selva<span class="verde">Caso 1: La Noche del Mirador</span></h1>
+      <div class="caso-tag">Yvyrá Bruma Lodge · Selva Misionera</div>
+      <p class="frase-portada atmosfera">“En la selva, el silencio nunca está vacío.”</p>
+
+      <div class="nav-acciones" style="justify-content:center">
+        <button class="btn primario" onclick="iniciar()">Iniciar expediente</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HISTORIA / REGISTROS ===================== -->
+  <section id="historia" class="scene scene-pad">
+    <div class="eyebrow reveal">Fase I · Introducción</div>
+    <h2 class="titulo-seccion reveal">La llegada</h2>
+    <div class="eyebrow reveal" style="margin-top:1.6rem">Prólogo · Primera persona</div>
+    <div class="relato reveal" id="prologo"></div>
+
+    <hr class="sep">
+
+    <h2 class="titulo-seccion reveal" style="font-size:clamp(1.6rem,4.5vw,2.4rem)">Registros audiovisuales</h2>
+    <p class="sub-seccion reveal" style="margin-bottom:1.6rem">Cuatro registros reconstruyen la noche. Reproducilos en orden: cada uno deja una marca.</p>
+
+    <div id="registro-modulo" class="reveal"></div>
+  </section>
+
+  <!-- ===================== EXPEDIENTE ===================== -->
+  <section id="expediente" class="scene scene-pad">
+    <div class="eyebrow reveal">Fase II · Expediente del caso</div>
+    <h2 class="titulo-seccion reveal">El caso</h2>
+    <hr class="sep">
+
+    <div class="tarjeta reveal">
+      <div class="expediente-head">
+        <div>
+          <div class="eyebrow" style="margin:0">Caso 1</div>
+          <div class="serif" style="font-size:1.7rem;color:var(--hueso)">La Noche del Mirador</div>
+        </div>
+        <div class="estampa">Persona desaparecida</div>
+      </div>
+      <p class="relato" style="font-size:1.08rem">
+        El protagonista llega al <em>Yvyrá Bruma Lodge</em>, aislado en la selva misionera, justo antes de una
+        tormenta. Esa noche desaparece <span class="voz">Matías Arce</span>, un periodista ambiental que investigaba
+        un viejo accidente relacionado con el Mirador del Guatambú. Todos los presentes dicen haber estado en lugares
+        distintos. Todos escucharon algo. Nadie dice toda la verdad.
+      </p>
+      <div class="dato-grid">
+        <div class="dato"><div class="k">Lugar</div><div class="v">Yvyrá Bruma Lodge</div></div>
+        <div class="dato"><div class="k">Hora de desaparición</div><div class="v">22:40</div></div>
+        <div class="dato"><div class="k">Primera evidencia</div><div class="v">23:05 — Linterna roja</div></div>
+        <div class="dato"><div class="k">Sospechosos</div><div class="v">3</div></div>
+      </div>
+    </div>
+
+    <div class="tarjeta reveal" style="margin-top:22px">
+      <div class="grid cols-2" style="align-items:center">
+        <div class="ficha-img" style="aspect-ratio:4/5;border-radius:8px;max-width:300px">
+          <img data-asset="matias.jpg" alt="Matías Arce">
+        </div>
+        <div>
+          <div class="rol" style="font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:var(--dorado)">Periodista ambiental · Documentalista</div>
+          <h3 class="serif" style="font-size:2rem;color:var(--hueso);margin:4px 0 10px">Matías Arce</h3>
+          <p style="color:var(--hueso-tenue)">Llegó con la excusa de una nota turística sobre experiencias de selva.
+          En realidad investigaba una denuncia por la compra irregular de tierras cercanas al arroyo y un accidente
+          ocurrido años atrás en el Mirador del Guatambú.</p>
+          <p class="declar" style="margin-top:14px">“Esta noche alguien va a tener que explicar por qué el mirador estuvo cerrado durante tres años.”</p>
+          <div class="bloque-sec" style="margin-top:16px;border-top:1px solid var(--linea-fina);padding-top:14px">
+            <div class="lab" style="font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--dorado);margin-bottom:6px">Objetos que llevaba</div>
+            <p style="color:var(--hueso)">Grabadora de bolsillo · mochila impermeable · carpeta con documentos · linterna pequeña.</p>
+            <p style="color:var(--rojo-claro);margin-top:8px;font-size:.92rem"><b>Dato clave:</b> la carpeta con documentos desapareció junto con él.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tarjeta reveal" style="margin-top:22px">
+      <div class="expediente-head">
+        <div>
+          <div class="eyebrow" style="margin:0">Antecedente</div>
+          <div class="serif" style="font-size:1.55rem;color:var(--hueso)">¿Qué investigaba Matías Arce?</div>
+        </div>
+        <div class="estampa">Caso Lucía Ferreyra</div>
+      </div>
+      <div class="relato" style="font-size:1.06rem">
+        <p>Matías llegó al <em>Yvyrá Bruma Lodge</em> para investigar la muerte de <span class="voz">Lucía Ferreyra</span>, ocurrida tres años atrás en el sector del Mirador del Guatambú. La versión oficial decía que Lucía había caído durante una caminata nocturna no autorizada, presentándola como una huésped imprudente que ingresó al mirador durante una tormenta, pese a que el acceso estaba cerrado. Después de esa noche, el mirador permaneció clausurado durante años.</p>
+        <p>Pero Matías encontró contradicciones. La tranquera del mirador solo podía abrirse con llave maestra. El registro de llaves había sido corregido a mano. Una fotografía mostraba luces encendidas cerca del mirador cuando nadie debía estar allí. Y un testimonio antiguo mencionaba una discusión entre dos mujeres poco antes de la caída.</p>
+        <p>Una de esas mujeres era <span class="voz">Lucía Ferreyra</span>. La otra era <span class="voz">Vera Salvatierra</span>.</p>
+        <p>Matías sospechaba que Lucía no había muerto por imprudencia: que había descubierto una operación irregular vinculada a tierras cercanas al arroyo, y que alguien del lodge encubrió lo ocurrido para proteger el negocio. Esa noche llegó con una carpeta de documentos, una grabadora y una cita pendiente con la verdad.</p>
+      </div>
+      <p class="declar" style="margin-top:6px">“Si el mirador estaba cerrado, alguien tuvo que abrirlo. Y esa persona todavía está acá.”</p>
+    </div>
+
+    <div class="nav-acciones">
+      <button class="btn" onclick="go('personajes')">Ver a los sospechosos →</button>
+    </div>
+  </section>
+
+  <!-- ===================== PERSONAJES ===================== -->
+  <section id="personajes" class="scene scene-pad">
+    <div class="eyebrow reveal">Fase II · Los presentes</div>
+    <h2 class="titulo-seccion reveal">Sospechosos</h2>
+    <p class="sub-seccion reveal">Tres personas. Tres coartadas. Tocá cada ficha para leer su declaración y su secreto.</p>
+    <hr class="sep">
+    <div class="grid cols-3" id="personajes-grid"></div>
+    <div class="nav-acciones">
+      <button class="btn" onclick="go('lugares')">Recorrer los lugares →</button>
+    </div>
+  </section>
+
+  <!-- ===================== LUGARES ===================== -->
+  <section id="lugares" class="scene scene-pad">
+    <div class="eyebrow reveal">Fase II · El predio</div>
+    <h2 class="titulo-seccion reveal">Lugares clave</h2>
+    <p class="sub-seccion reveal">El lodge se extiende entre pasarelas, senderos y un mirador alto. Cada lugar guarda un eco.</p>
+    <hr class="sep">
+    <div class="grid cols-2" id="lugares-grid"></div>
+    <div class="nav-acciones">
+      <button class="btn" onclick="go('objetos')">Inventariar los objetos →</button>
+    </div>
+  </section>
+
+  <!-- ===================== OBJETOS ===================== -->
+  <section id="objetos" class="scene scene-pad">
+    <div class="eyebrow reveal">Fase II · Inventario</div>
+    <h2 class="titulo-seccion reveal">Objetos clave</h2>
+    <p class="sub-seccion reveal">Tres objetos atraviesan la noche. Uno de ellos abre el lugar donde nadie admite haber estado.</p>
+    <hr class="sep">
+    <div class="grid cols-3" id="objetos-grid"></div>
+    <div class="nav-acciones">
+      <button class="btn" onclick="go('evidencias')">Revisar las pruebas →</button>
+    </div>
+  </section>
+
+  <!-- ===================== EVIDENCIAS ===================== -->
+  <section id="evidencias" class="scene scene-pad">
+    <div class="eyebrow reveal">Fase III · Pruebas recogidas</div>
+    <h2 class="titulo-seccion reveal">Evidencias</h2>
+    <p class="sub-seccion reveal">Diez piezas levantadas esa noche. Abrí cada una: al leerla queda registrada en el expediente. Algunas reabren un caso de hace tres años.</p>
+    <div class="barra-lectura"><i id="barra-ev"></i></div>
+    <div style="font-size:.78rem;color:var(--hueso-tenue)" id="ev-conteo">0 de 10 pruebas leídas</div>
+    <hr class="sep">
+    <div class="ev-grid" id="evidencias-grid"></div>
+    <div class="nav-acciones">
+      <button class="btn" onclick="go('pistas')">Ver pistas lógicas →</button>
+    </div>
+  </section>
+
+  <!-- ===================== PISTAS ===================== -->
+  <section id="pistas" class="scene scene-pad">
+    <div class="eyebrow reveal">Fase III · Lógica del caso</div>
+    <h2 class="titulo-seccion reveal">Pistas</h2>
+    <p class="sub-seccion reveal">Cinco hechos verificados. Con ellos se arma el tablero.</p>
+    <hr class="sep">
+    <div class="pistas-grid" id="pistas-grid"></div>
+    <div class="nav-acciones">
+      <button class="btn" onclick="go('tablero')">Abrir el tablero de deducción →</button>
+    </div>
+  </section>
+
+  <!-- ===================== TABLERO ===================== -->
+  <section id="tablero" class="scene scene-pad">
+    <div class="eyebrow reveal">Fase IV · Deducción</div>
+    <h2 class="titulo-seccion reveal">Tablero de deducción</h2>
+    <p class="sub-seccion reveal">Cruzá las pruebas. Tocá una celda para alternar: vacío → ✕ descartado → ✔ confirmado.</p>
+    <div class="tablero-controles">
+      <button class="btn ghost" onclick="go('pistas')">↩ Ver pistas</button>
+      <button class="btn ghost" onclick="go('evidencias')">↩ Ver evidencias</button>
+      <label style="display:flex;align-items:center;gap:8px;font-size:.82rem;color:var(--hueso-tenue);cursor:pointer">
+        <input type="checkbox" id="autox" onchange="toggleAuto()"> Auto-descartar fila/columna al confirmar (✔)
+      </label>
+    </div>
+    <hr class="sep">
+
+    <div class="tablero-bloque">
+      <div class="tablero-titulo">Tablero 1 — Sospechosos × Objetos</div>
+      <div class="tablero-hint">¿Quién tuvo cada objeto esa noche?</div>
+      <div class="tabla-scroll"><table class="deduccion" id="tabla-objetos"></table></div>
+    </div>
+
+    <div class="tablero-bloque">
+      <div class="tablero-titulo">Tablero 2 — Sospechosos × Lugares</div>
+      <div class="tablero-hint">¿Dónde estuvo realmente cada uno?</div>
+      <div class="tabla-scroll"><table class="deduccion" id="tabla-lugares"></table></div>
+    </div>
+
+    <div class="leyenda">
+      <span><b>✕</b> descartado</span>
+      <span><b>✔</b> confirmado</span>
+      <span><b>vacío</b> sin decidir</span>
+    </div>
+    <p class="aclara">El tablero es tuyo: marcá libremente. La acusación final no exige completar las grillas, pero resolverlas te dará la respuesta.</p>
+
+    <div class="nav-acciones">
+      <button class="btn ghost" onclick="limpiarTablero()">Limpiar tablero</button>
+      <button class="btn rojo" onclick="go('acusacion')">Acusar al culpable →</button>
+    </div>
+  </section>
+
+  <!-- ===================== ACUSACIÓN ===================== -->
+  <section id="acusacion" class="scene scene-pad">
+    <div class="eyebrow reveal">Fase V · Acusación</div>
+    <h2 class="titulo-seccion reveal">Acusar al culpable</h2>
+    <p class="sub-seccion reveal">Tres preguntas. Una sola combinación cierra con las pruebas.</p>
+    <div class="tablero-controles"><button class="btn ghost" onclick="go('tablero')">↩ Volver al tablero</button></div>
+    <hr class="sep">
+
+    <div class="acu-bloque">
+      <h3>1 · ¿Quién mintió?</h3>
+      <div class="opciones" id="op-culpable"></div>
+    </div>
+    <div class="acu-bloque">
+      <h3>2 · ¿Qué objeto fue clave?</h3>
+      <div class="opciones" id="op-objeto"></div>
+    </div>
+    <div class="acu-bloque">
+      <h3>3 · ¿Dónde ocurrió realmente el hecho?</h3>
+      <div class="opciones" id="op-lugar"></div>
+    </div>
+
+    <div class="nav-acciones">
+      <button class="btn rojo primario" id="btn-confirmar" onclick="confirmarAcusacion()" disabled>Confirmar acusación</button>
+    </div>
+  </section>
+
+  <!-- ===================== REVELACIÓN ===================== -->
+  <section id="revelacion" class="scene scene-pad">
+    <div id="revel-cont"></div>
+  </section>
+
+</main>
+
+<!-- ===================== MODAL ===================== -->
+<div id="modal" onclick="if(event.target.id==='modal')cerrarModal()">
+  <div class="modal-card" id="modal-card"></div>
+</div>
+
+<!-- ===================== TOAST ===================== -->
+<div id="toast"></div>
+
+<script>
+/* ============================================================
+   DATOS DEL CASO
+   ============================================================ */
+const ASSET_DIR = ""; // mismo directorio que index.html
+function asset(nombre){ return ASSET_DIR + encodeURI(nombre); }
+
+const VIDEOS = [
+  {n:"I",   archivo:"video1.mp4", lab:"El Camino", narr:"El asfalto quedó atrás. Tierra colorada, piedras y una selva que empieza a cerrarse sobre la huella."},
+  {n:"II",  archivo:"video2.mp4", lab:"La Llegada", narr:"Anochece. El viento se levanta y las primeras gotas caen. Las luces del lodge tiemblan entre los árboles."},
+  {n:"III", archivo:"video3.mp4", lab:"La Desaparición", narr:"Tormenta y corte de luz. A las 22:40, Matías Arce ya no está."},
+  {n:"IV",  archivo:"video4.mp4", lab:"El Hallazgo", narr:"Mirador. Tranquera abierta. Una linterna roja sobre el barro, todavía tibia."}
+];
+
+const PROLOGO = [
+  "La camioneta dejó el asfalto hace casi cuarenta minutos.",
+  "Al principio intenté convencerme de que era parte del encanto del lugar: tierra colorada, curvas cerradas, piedras golpeando debajo del vehículo y una selva tan cerrada que parecía moverse junto a nosotros.",
+  "Después el camino se volvió más angosto.",
+  "El chofer bajó la velocidad cuando perdimos señal. Miró el espejo retrovisor y dijo, sin cambiar el tono:",
+  '<span class="voz">—Desde acá, si pasa algo, se resuelve adentro.</span>',
+  "No supe si era una advertencia o una costumbre del lugar.",
+  "Yo no había ido al Yvyrá Bruma Lodge para descansar. Había ido por Matías Arce.",
+  "Dos noches antes, Matías me había enviado un mensaje:",
+  '<span class="voz">“Encontré algo sobre el mirador. No puedo mandarlo por correo. Vení antes de la tormenta. Si mañana no respondo, abrí el archivo.”</span>',
+  "A las 20:17 vimos el portón de madera entre los árboles. El cartel apenas iluminado decía: <span class=\"voz\">Yvyrá Bruma Lodge.</span>",
+  "Más allá del ingreso, las cabañas aparecían separadas por pasarelas elevadas. La recepción brillaba con una luz cálida, pero alrededor todo era sombra, lluvia contenida y vegetación cerrándose sobre la noche.",
+  "Matías estaba ahí cuando llegué. Lo vi en la recepción, con la campera húmeda, una carpeta bajo el brazo y esa mirada de quien ya no sabe si descubrió una verdad o una amenaza.",
+  "No alcanzó a explicarme todo.",
+  "A las 22:40, las luces fallaron. A las 23:05, encontraron una linterna roja cerca del Mirador del Guatambú. Matías Arce ya no estaba.",
+  'Y antes de la medianoche, entendí que en ese lodge nadie había mentido por miedo. <span class="voz">Habían mentido para sobrevivir.</span>'
+];
+
+const PERSONAJES = [
+  {
+    id:"emilia", nombre:"Emilia Rojas", rol:"Administradora del lodge", img:"emilia.jpg", clase:"",
+    mini:"Elegante, serena, correcta. Conoce cada llave del predio.",
+    frase:"En un lugar como este, la calma también es parte del servicio.",
+    desc:"Conoce cada cabaña, cada llave, cada pasarela y cada sendero. Afirma que durante la tormenta estuvo en recepción revisando reservas y esperando que volviera la luz.",
+    secreto:"Matías había descubierto que Emilia sabía más de lo que decía sobre el cierre antiguo del mirador.",
+    declar:"Permanecí en recepción desde las 22:15 hasta después del corte de luz. Nadie me vio salir porque nadie pasó por recepción en ese momento. Cuando escuché el grito, ya era tarde."
+  },
+  {
+    id:"tomas", nombre:"Tomás Benítez", rol:"Guía de senderismo y 4x4", img:"tomas.jpg", clase:"",
+    mini:"Práctico, reservado, algo brusco. Conoce la selva como nadie.",
+    frase:"La selva no es peligrosa. Peligroso es entrar creyendo que uno manda.",
+    desc:"Conoce los senderos y el clima mejor que nadie. Dice que salió al Sendero del Arroyo Negro para revisar una rama caída y que volvió antes de escuchar el grito.",
+    secreto:"No quería que se investigara el arroyo: años atrás hubo un accidente durante una excursión nocturna.",
+    declar:"Bajé al Sendero del Arroyo Negro porque la tormenta podía tirar ramas sobre el paso. Llevé una linterna. No subí al mirador. Conozco ese lugar y no se entra ahí con lluvia."
+  },
+  {
+    id:"vera", nombre:"Vera Salvatierra", rol:"Fotógrafa de viajes · testigo del caso Lucía", img:"vera.jpg", clase:"",
+    mini:"Observa todo, habla poco. Ya conocía este lodge desde antes.",
+    frase:"Una buena foto no muestra todo. A veces oculta lo único que importa.",
+    desc:"Contratada para una producción visual del lodge. Pero Vera ya conocía el lugar: tres años atrás también estuvo aquí la noche en que murió Lucía Ferreyra, cuya caída desde el Mirador del Guatambú fue archivada como accidente. Entonces trabajaba como fotógrafa freelance y, según el expediente original, no había visto ni oído nada importante. Eso no era cierto.",
+    secreto:"Matías no la investigaba como culpable directa, pero quería demostrar que Vera mintió en el caso de Lucía. Si publicaba la nota, ella quedaría expuesta como testigo que ocultó información clave durante tres años. Su motivo para callar a Matías era fuerte; pero Vera no tenía la llave maestra.",
+    declar:"Vine por trabajo. Tenía que fotografiar el lodge al amanecer. No sabía que Matías estaba investigando algo tan viejo.",
+    sospechas:[
+      "Estuvo en el lodge la noche en que murió Lucía Ferreyra.",
+      "Fue escuchada discutiendo con Lucía antes de la caída.",
+      "Nunca declaró esa discusión.",
+      "Conservaba fotografías antiguas del mirador.",
+      "Matías Arce investigaba su mentira y podía exponerla públicamente.",
+      "Esa noche borró fotografías de su cámara.",
+      "Su grabadora registró el sonido de la tranquera del mirador.",
+      "No entregó la grabación completa al principio.",
+      "Tenía barro rojo en las botas.",
+      "Pero no tenía la llave maestra."
+    ],
+    declar2:"Sí, estuve acá cuando murió Lucía. Y sí, discutí con ella. Pero no la empujé. Lucía quería denunciar algo esa noche. Yo tuve miedo. Me fui. Ese fue mi error: callarme."
+  }
+];
+
+const OBJETOS = [
+  {id:"llave",   nombre:"Llave maestra",       icono:"🗝️", img:"llave_maestra.jpg",
+   desc:"Abre la recepción, las cabañas y la tranquera secundaria del Mirador del Guatambú. Pocas manos la tienen.",
+   asoc:"Conecta con Emilia Rojas y con el acceso al mirador."},
+  {id:"linterna",nombre:"Linterna roja",        icono:"🔦", img:"linterna.jpg",
+   desc:"Linterna de senderismo hallada cerca del acceso al mirador. Estaba mojada y todavía tibia.",
+   asoc:"Conecta con Tomás Benítez y el Sendero del Arroyo Negro."},
+  {id:"grabadora",nombre:"Grabadora de bolsillo",icono:"🎙️", img:"grabadora_bolsillo.jpg",
+   desc:"Dispositivo pequeño para registrar audios ambientales. Capta pasos, lluvia, voces lejanas y crujidos de madera.",
+   asoc:"Conecta con Vera Salvatierra y con la grabación del portón del mirador."}
+];
+
+const LUGARES = [
+  {id:"mirador", nombre:"Mirador del Guatambú", img:"mirador.jpg",
+   desc:"Lugar alto, oscuro y peligroso durante la tormenta. Tiene una tranquera secundaria cerrada que solo abre la llave maestra."},
+  {id:"arroyo", nombre:"Sendero del Arroyo Negro", img:"huellas.jpg",
+   desc:"Zona húmeda, piedras resbaladizas y barro rojo. El sonido del agua tapa otros ruidos."},
+  {id:"deck", nombre:"Deck de la Cabaña 3", img:"deck.jpg",
+   desc:"Pasarela de madera elevada, alejada de la recepción. Desde ahí se escuchan ecos del mirador cuando el viento cambia."},
+  {id:"tranquera", nombre:"Tranquera del Mirador", img:"tranquera.jpg",
+   desc:"Acceso secundario al mirador. Solo puede abrirse con llave maestra. Apareció entreabierta tras el corte de luz."}
+];
+
+const EVIDENCIAS = [
+  {n:"01", titulo:"Declaración de Emilia", tipo:"Declaración escrita", icono:"📄", img:null, audio:false,
+   texto:"“Permanecí en recepción desde las 22:15 hasta después del corte de luz. Nadie me vio salir porque nadie pasó por recepción en ese momento. Cuando escuché el grito, ya era tarde.”",
+   funcion:"Instala su coartada."},
+  {n:"02", titulo:"Declaración de Tomás", tipo:"Declaración escrita", icono:"📄", img:null, audio:false,
+   texto:"“Bajé al Sendero del Arroyo Negro porque la tormenta podía tirar ramas sobre el paso. Llevé una linterna. No subí al mirador. Conozco ese lugar y no se entra ahí con lluvia.”",
+   funcion:"Ubica a Tomás en el sendero."},
+  {n:"03", titulo:"Audio de Vera", tipo:"Grabación · transcripción", icono:"🎧", img:null, audio:true,
+   texto:"Audio recuperado de la grabadora de Vera Salvatierra. Transcripción parcial:<br><br>“Estoy en la cabaña. No pienso salir con esta tormenta. Esperen… eso fue un portón. ¿Quién abrió el mirador?”",
+   funcion:"Confirma que Vera estaba cerca de la Cabaña 3 y escuchó el portón del mirador."},
+  {n:"04", titulo:"Linterna roja hallada", tipo:"Evidencia física", icono:"🔦", img:"linterna.jpg", audio:false,
+   texto:"La linterna roja fue hallada mojada cerca del acceso al mirador. Estaba cubierta de barro rojo y todavía tibia al tacto, como si hubiera sido usada minutos antes.",
+   funcion:"Asocia la linterna con el sector exterior."},
+  {n:"05", titulo:"Huellas en barro rojo", tipo:"Evidencia física", icono:"👣", img:"huellas.jpg", audio:false,
+   texto:"Las huellas fueron encontradas sobre el barro rojo del Sendero del Arroyo Negro. La lluvia estaba comenzando a deformarlas, pero aún se distinguía una trayectoria reciente.",
+   funcion:"Conecta el sendero con la linterna y con Tomás."},
+  {n:"06", titulo:"Tranquera abierta", tipo:"Evidencia física", icono:"🚪", img:"tranquera.jpg", audio:false,
+   texto:"La tranquera secundaria del Mirador del Guatambú apareció entreabierta después del corte de luz. Según el personal, solo podía abrirse con llave maestra.",
+   funcion:"Conecta el mirador con la llave maestra."},
+  {n:"07", titulo:"Nota mojada", tipo:"Documento hallado", icono:"📝", img:"nota.jpg", audio:false,
+   texto:"Fragmento encontrado en la mochila de Matías Arce:<br><br>“No fue un accidente. Alguien cerró el mirador aquella noche y alguien volvió a abrirlo ahora.”",
+   funcion:"Revela que el caso actual se conecta con un hecho anterior."},
+  {n:"08", titulo:"Registro antiguo: noche de Lucía Ferreyra", tipo:"Documento de archivo", icono:"🗂️", img:null, audio:false,
+   texto:"El registro de huéspedes y personal auxiliar confirma que <b>Vera Salvatierra</b> estuvo en el Yvyrá Bruma Lodge la noche en que murió Lucía Ferreyra, tres años atrás.",
+   funcion:"Demuestra que Vera no era ajena al caso anterior."},
+  {n:"09", titulo:"Testimonio omitido", tipo:"Declaración tardía", icono:"🗣️", img:null, audio:false,
+   texto:"Una empleada declaró años después haber escuchado una discusión entre <b>Lucía Ferreyra</b> y <b>Vera Salvatierra</b> cerca de las pasarelas del mirador, pocas horas antes de la caída.",
+   funcion:"Hace que Vera parezca sospechosa del caso anterior y del actual."},
+  {n:"10", titulo:"Fotografías eliminadas", tipo:"Evidencia digital", icono:"📷", img:null, audio:false,
+   texto:"La cámara de Vera contiene saltos en la numeración de archivos. Varias fotos tomadas esa tarde fueron eliminadas antes de entregar el equipo.",
+   funcion:"Refuerza que Vera oculta información, aunque no la convierte en culpable del hecho actual."}
+];
+
+const PISTAS = [
+  "La persona que estuvo en la Cabaña 3 dejó una grabación encendida.",
+  "Tomás fue visto entrando al Sendero del Arroyo Negro y no subió al mirador.",
+  "La linterna roja apareció junto al barro del Sendero del Arroyo Negro.",
+  "Vera no tenía la llave maestra.",
+  "La única forma de abrir la tranquera secundaria del Mirador del Guatambú era con la llave maestra."
+];
+
+const SOSPECHOSOS = [{id:"emilia",n:"Emilia Rojas"},{id:"tomas",n:"Tomás Benítez"},{id:"vera",n:"Vera Salvatierra"}];
+const COLS_OBJ = [{id:"llave",n:"Llave maestra"},{id:"linterna",n:"Linterna roja"},{id:"grabadora",n:"Grabadora de bolsillo"}];
+const COLS_LUG = [{id:"mirador",n:"Mirador del Guatambú"},{id:"arroyo",n:"Sendero del Arroyo Negro"},{id:"deck",n:"Deck de la Cabaña 3"}];
+
+const SOLUCION = { culpable:"emilia", objeto:"llave", lugar:"mirador" };
+
+const SECCIONES = [
+  {id:"historia",   nombre:"Historia",   fase:1},
+  {id:"expediente", nombre:"Expediente", fase:2},
+  {id:"personajes", nombre:"Personajes", fase:2},
+  {id:"lugares",    nombre:"Lugares",    fase:2},
+  {id:"objetos",    nombre:"Objetos",    fase:2},
+  {id:"evidencias", nombre:"Evidencias", fase:3},
+  {id:"pistas",     nombre:"Pistas",     fase:3},
+  {id:"tablero",    nombre:"Tablero",    fase:4},
+  {id:"acusacion",  nombre:"Acusación",  fase:5},
+  {id:"revelacion", nombre:"Revelación", fase:5}
+];
+
+/* ============================================================
+   ESTADO + PERSISTENCIA
+   ============================================================ */
+const LS_KEY = "archivo_selva_caso1";
+let estado = {
+  modo:"solo", iniciado:false, seccion:"portada",
+  leidas:[], maxFase:1, autox:false,
+  tablero:{objetos:{}, lugares:{}},
+  acusacion:{culpable:null, objeto:null, lugar:null}
+};
+function guardar(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(estado)); }catch(e){} }
+function cargar(){ try{ const d=localStorage.getItem(LS_KEY); if(d) estado=Object.assign(estado,JSON.parse(d)); }catch(e){} }
+
+/* ============================================================
+   NAVEGACIÓN
+   ============================================================ */
+function go(id){
+  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('activa'));
+  const el=document.getElementById(id); if(!el) return;
+  el.classList.add('activa');
+  estado.seccion=id;
+  const sec=SECCIONES.find(s=>s.id===id);
+  if(sec && sec.fase>estado.maxFase) estado.maxFase=sec.fase;
+  document.getElementById('topbar').classList.toggle('visible', id!=='portada');
+  window.scrollTo(0,0);
+  if(id==='revelacion') {} // se construye al confirmar
+  pintarFases(); pintarMenu(); animarReveal(); guardar(); cerrarMenu();
+}
+
+function pintarFases(){
+  const cur = (SECCIONES.find(s=>s.id===estado.seccion)||{fase:0}).fase;
+  document.getElementById('fases').innerHTML = ["I","II","III","IV","V"].map((r,i)=>{
+    const f=i+1; let c="fase"; if(f===cur)c+=" on"; else if(f<=estado.maxFase && f<cur)c+=" done"; else if(f<cur)c+=" done";
+    return `<div class="${c}" title="Fase ${r}">${r}</div>`;
+  }).join('');
+}
+
+function pintarMenu(){
+  document.getElementById('menu-links').innerHTML = SECCIONES.map((s,i)=>{
+    const desbloq = s.fase<=Math.max(estado.maxFase, (SECCIONES.find(x=>x.id===estado.seccion)||{fase:1}).fase);
+    return `<button class="menu-link ${desbloq?'':'lock'}" ${desbloq?`onclick="go('${s.id}')"`:''}>
+      <span>${s.nombre}</span><span class="num">${String(i+1).padStart(2,'0')}${desbloq?'':' 🔒'}</span></button>`;
+  }).join('');
+}
+function abrirMenu(){ document.getElementById('menu').classList.add('abierto'); }
+function cerrarMenu(){ document.getElementById('menu').classList.remove('abierto'); }
+
+/* ============================================================
+   PORTADA / INICIO
+   ============================================================ */
+function iniciar(){
+  estado.iniciado=true;
+  guardar();
+  go('historia');
+}
+
+/* ============================================================
+   CONSTRUCCIÓN DE CONTENIDO
+   ============================================================ */
+function construir(){
+  // Registros audiovisuales (un solo reproductor)
+  regActual = 0;
+  renderRegistro();
+
+  // Prólogo
+  document.getElementById('prologo').innerHTML = PROLOGO.map(p=>`<p>${p}</p>`).join('');
+
+  // Personajes
+  document.getElementById('personajes-grid').innerHTML = PERSONAJES.map(p=>`
+    <div class="ficha reveal" onclick="verPersonaje('${p.id}')">
+      <div class="ficha-img"><img data-asset="${p.img}" alt="${p.nombre}"></div>
+      <div class="ficha-cuerpo">
+        <div class="rol">${p.rol}</div>
+        <div class="nombre">${p.nombre}</div>
+        <div class="mini">${p.mini}</div>
+        <div class="ver">Abrir ficha →</div>
+      </div>
+    </div>`).join('');
+
+  // Lugares
+  document.getElementById('lugares-grid').innerHTML = LUGARES.map(l=>`
+    <div class="ficha lugar reveal" onclick="verLugar('${l.id}')">
+      <div class="ficha-img"><img data-asset="${l.img}" alt="${l.nombre}"></div>
+      <div class="ficha-cuerpo">
+        <div class="rol">Lugar</div>
+        <div class="nombre">${l.nombre}</div>
+        <div class="mini">${l.desc.slice(0,70)}…</div>
+        <div class="ver">Ampliar →</div>
+      </div>
+    </div>`).join('');
+
+  // Objetos
+  document.getElementById('objetos-grid').innerHTML = OBJETOS.map(o=>`
+    <div class="ficha objeto reveal" onclick="verObjeto('${o.id}')">
+      <div class="ficha-img">${o.img?`<img data-asset="${o.img}" alt="${o.nombre}">`:`<div class="ev-tipo-icon" style="height:100%;font-size:3rem">${o.icono}</div>`}</div>
+      <div class="ficha-cuerpo">
+        <div class="rol">Objeto</div>
+        <div class="nombre">${o.nombre}</div>
+        <div class="ver">Ampliar →</div>
+      </div>
+    </div>`).join('');
+
+  // Evidencias
+  document.getElementById('evidencias-grid').innerHTML = EVIDENCIAS.map(e=>`
+    <div class="ev-card ${estado.leidas.includes(e.n)?'leida':''}" id="ev-${e.n}" onclick="verEvidencia('${e.n}')">
+      <span class="ev-num">${e.n}</span><span class="ev-leida-tag">Leída ✓</span>
+      ${e.img?`<div class="ev-thumb"><img data-asset="${e.img}" alt="${e.titulo}"></div>`:`<div class="ev-tipo-icon">${e.icono}</div>`}
+      <div class="ev-body"><div class="et">${e.tipo}</div><div class="en">${e.titulo}</div></div>
+    </div>`).join('');
+  actualizarConteoEv();
+
+  // Pistas
+  document.getElementById('pistas-grid').innerHTML = PISTAS.map((p,i)=>`
+    <div class="pista reveal"><div class="pn">${String(i+1).padStart(2,'0')}</div><div class="pt">${p}</div></div>`).join('');
+
+  // Tablero
+  construirTabla('tabla-objetos', COLS_OBJ, 'objetos');
+  construirTabla('tabla-lugares', COLS_LUG, 'lugares');
+
+  // Acusación
+  document.getElementById('op-culpable').innerHTML = SOSPECHOSOS.map(s=>`<div class="opcion" data-g="culpable" data-v="${s.id}" onclick="elegir('culpable','${s.id}')">${s.n}</div>`).join('');
+  document.getElementById('op-objeto').innerHTML = COLS_OBJ.map(o=>`<div class="opcion" data-g="objeto" data-v="${o.id}" onclick="elegir('objeto','${o.id}')">${o.n}</div>`).join('');
+  document.getElementById('op-lugar').innerHTML = COLS_LUG.map(l=>`<div class="opcion" data-g="lugar" data-v="${l.id}" onclick="elegir('lugar','${l.id}')">${l.n}</div>`).join('');
+
+  // Resolver assets data-asset
+  cargarAssets();
+}
+
+function cargarAssets(){
+  document.querySelectorAll('[data-asset]').forEach(el=>{
+    const nombre=el.getAttribute('data-asset');
+    if(!nombre) return;
+    if(el.tagName==='VIDEO'){ if(!el.src) el.src=asset(nombre); }
+    else if(!el.getAttribute('src')){
+      el.alt=nombre;
+      el.addEventListener('error',function(){
+        el.classList.add('img-rota');
+        el.alt='⚠ No se pudo cargar: '+nombre;
+      });
+      el.src=asset(nombre);
+    }
+  });
+}
+
+/* ============================================================
+   REPRODUCTOR DE REGISTROS AUDIOVISUALES
+   ============================================================ */
+let regActual = 0;
+function renderRegistro(){
+  const cont=document.getElementById('registro-modulo'); if(!cont) return;
+  const total=VIDEOS.length;
+  const v=VIDEOS[regActual];
+  const esUltimo=regActual===total-1;
+  const puntos=VIDEOS.map((_,i)=>`<i class="${i===regActual?'on':''}"></i>`).join('');
+  cont.innerHTML=`
+    <div class="registro-card">
+      <div class="video-wrap">
+        <video id="registro-video" controls preload="metadata" playsinline
+          onerror="document.getElementById('registro-fb').style.display='flex'"></video>
+        <div class="video-fallback" id="registro-fb">No se pudo cargar <b>${v.archivo}</b>.<br>Verificá que el archivo esté en la carpeta del juego.</div>
+      </div>
+      <div class="registro-info">
+        <div class="registro-meta">
+          <span class="registro-contador">Registro ${v.n} de IV</span>
+          <span class="registro-titulo">${v.lab}</span>
+        </div>
+        <p class="registro-frase">${v.narr}</p>
+        <div class="registro-controles">
+          <button class="btn ghost" ${regActual===0?'disabled':''} onclick="regPrev()">← Registro anterior</button>
+          ${esUltimo
+            ? `<button class="btn" onclick="go('expediente')">Continuar al expediente →</button>`
+            : `<button class="btn" onclick="regNext()">Siguiente registro →</button>`}
+        </div>
+        <div class="registro-puntos">${puntos}</div>
+      </div>
+    </div>`;
+  const vid=document.getElementById('registro-video');
+  if(vid){ vid.src=asset(v.archivo); vid.load(); }
+}
+function regNext(){ if(regActual<VIDEOS.length-1){ regActual++; renderRegistro(); } }
+function regPrev(){ if(regActual>0){ regActual--; renderRegistro(); } }
+
+/* ============================================================
+   MODALES DE FICHA
+   ============================================================ */
+function abrirModalHTML(html){
+  document.getElementById('modal-card').innerHTML = `<button class="modal-cerrar" onclick="cerrarModal()">✕</button>`+html;
+  document.getElementById('modal').classList.add('abierto');
+  cargarAssets();
+}
+function cerrarModal(){
+  document.getElementById('modal').classList.remove('abierto');
+  // detener cualquier audio simulado
+  audioSimDetener();
+}
+
+function verPersonaje(id){
+  const p=PERSONAJES.find(x=>x.id===id);
+  abrirModalHTML(`
+    <img class="modal-img" data-asset="${p.img}" alt="${p.nombre}">
+    <div class="modal-body">
+      <div class="rol">${p.rol}</div>
+      <div class="nombre">${p.nombre}</div>
+      <div class="frase">“${p.frase}”</div>
+      <p>${p.desc}</p>
+      <div class="bloque-sec"><div class="lab">Declaración inicial</div><div class="declar">“${p.declar}”</div></div>
+      <div class="bloque-sec"><div class="lab">Secreto</div><p style="color:var(--hueso-tenue)">${p.secreto}</p></div>
+      ${p.sospechas?`<div class="bloque-sec"><div class="lab">Información sospechosa</div><ul class="lista-sosp">${p.sospechas.map(s=>`<li>${s}</li>`).join('')}</ul></div>`:''}
+      ${p.declar2?(estado.leidas.length>=5
+        ? `<div class="bloque-sec"><div class="lab">Declaración desbloqueada</div><div class="declar">“${p.declar2}”</div></div>`
+        : `<div class="bloque-sec"><div class="lab">Declaración desbloqueada</div><p style="color:var(--niebla);font-style:italic">🔒 Revisá al menos 5 evidencias para desbloquear lo que Vera terminó admitiendo.</p></div>`):''}
+    </div>`);
+}
+function verLugar(id){
+  const l=LUGARES.find(x=>x.id===id);
+  abrirModalHTML(`
+    <img class="modal-img" data-asset="${l.img}" alt="${l.nombre}">
+    <div class="modal-body"><div class="rol">Lugar clave</div><div class="nombre">${l.nombre}</div>
+    <div class="sep-corto"></div><p>${l.desc}</p></div>`);
+}
+function verObjeto(id){
+  const o=OBJETOS.find(x=>x.id===id);
+  abrirModalHTML(`
+    ${o.img?`<img class="modal-img" data-asset="${o.img}" alt="${o.nombre}">`:`<div class="ev-tipo-icon" style="height:180px;font-size:4rem">${o.icono}</div>`}
+    <div class="modal-body"><div class="rol">Objeto clave</div><div class="nombre">${o.nombre}</div>
+    <div class="sep-corto"></div><p>${o.desc}</p>
+    ${o.asoc?`<div class="bloque-sec"><div class="lab" style="color:var(--dorado)">Asociación narrativa</div><p style="color:var(--hueso-tenue)">${o.asoc}</p></div>`:''}
+    </div>`);
+}
+function verEvidencia(n){
+  const e=EVIDENCIAS.find(x=>x.n===n);
+  if(!estado.leidas.includes(n)){ estado.leidas.push(n); guardar(); }
+  document.getElementById('ev-'+n)?.classList.add('leida');
+  actualizarConteoEv();
+  abrirModalHTML(`
+    ${e.img?`<img class="modal-img" data-asset="${e.img}" alt="${e.titulo}">`:''}
+    <div class="modal-body">
+      <div class="rol">Evidencia ${e.n} · ${e.tipo}</div>
+      <div class="nombre">${e.titulo}</div>
+      <div class="sep-corto"></div>
+      ${e.audio?audioSimHTML():''}
+      <p class="declar">${e.texto}</p>
+      <div class="bloque-sec"><div class="lab">Función en el caso</div><p style="color:var(--hueso-tenue)">${e.funcion}</p></div>
+    </div>`);
+}
+function actualizarConteoEv(){
+  const t=EVIDENCIAS.length, c=estado.leidas.length;
+  const cont=document.getElementById('ev-conteo'); if(cont) cont.textContent=`${c} de ${t} pruebas leídas`;
+  const barra=document.getElementById('barra-ev'); if(barra) barra.style.width=(c/t*100)+'%';
+}
+
+/* ---------- AUDIO SIMULADO ---------- */
+let audioTimer=null;
+function audioSimHTML(){
+  const barras=Array.from({length:34}).map(()=>'<i></i>').join('');
+  return `<div class="audio-sim" id="audioSim">
+    <button class="audio-play" id="audioBtn" onclick="audioSimToggle()">▶</button>
+    <div class="ondas">${barras}</div>
+    <span class="audio-time" id="audioTime">0:00 / 0:18</span>
+  </div>`;
+}
+function audioSimToggle(){
+  const sim=document.getElementById('audioSim'); const btn=document.getElementById('audioBtn');
+  if(!sim) return;
+  if(sim.classList.contains('activo')){ audioSimDetener(); return; }
+  sim.classList.add('activo'); btn.classList.add('play'); btn.textContent='❚❚';
+  let s=0; const total=18;
+  audioTimer=setInterval(()=>{
+    s++; const t=document.getElementById('audioTime');
+    if(t) t.textContent=`0:${String(s).padStart(2,'0')} / 0:18`;
+    if(s>=total) audioSimDetener();
+  },350);
+}
+function audioSimDetener(){
+  if(audioTimer){clearInterval(audioTimer);audioTimer=null;}
+  const sim=document.getElementById('audioSim'); const btn=document.getElementById('audioBtn');
+  if(sim) sim.classList.remove('activo');
+  if(btn){btn.classList.remove('play');btn.textContent='▶';}
+}
+
+/* ============================================================
+   TABLERO DE DEDUCCIÓN
+   ============================================================ */
+function construirTabla(tablaId, cols, key){
+  const tbl=document.getElementById(tablaId);
+  let h='<thead><tr><th class="esquina"></th>'+cols.map(c=>`<th>${c.n}</th>`).join('')+'</tr></thead><tbody>';
+  SOSPECHOSOS.forEach(s=>{
+    h+=`<tr><th>${s.n}</th>`;
+    cols.forEach(c=>{
+      const cid=s.id+'_'+c.id; const val=estado.tablero[key][cid]||0;
+      const cls=val===1?'celda x':val===2?'celda v':'celda';
+      const sym=val===1?'✕':val===2?'✔':'';
+      h+=`<td class="celda-td" onclick="ciclar('${key}','${s.id}','${c.id}')"><div class="${cls}" id="cell_${key}_${cid}">${sym}</div></td>`;
+    });
+    h+='</tr>';
+  });
+  tbl.innerHTML=h+'</tbody>';
+}
+function ciclar(key,sid,cid){
+  const id=sid+'_'+cid;
+  let v=estado.tablero[key][id]||0; v=(v+1)%3;
+  estado.tablero[key][id]=v;
+  pintarCelda(key,id,v);
+  if(v===2 && estado.autox){ autoDescartar(key,sid,cid); }
+  guardar();
+}
+function pintarCelda(key,id,v){
+  const el=document.getElementById('cell_'+key+'_'+id); if(!el)return;
+  el.className=v===1?'celda x':v===2?'celda v':'celda';
+  el.textContent=v===1?'✕':v===2?'✔':'';
+}
+function autoDescartar(key,sid,cid){
+  const cols=key==='objetos'?COLS_OBJ:COLS_LUG;
+  // misma fila (otros objetos/lugares del mismo sospechoso) -> X
+  cols.forEach(c=>{ if(c.id!==cid){ const id=sid+'_'+c.id; if((estado.tablero[key][id]||0)!==2){estado.tablero[key][id]=1;pintarCelda(key,id,1);} }});
+  // misma columna (otros sospechosos con ese objeto/lugar) -> X
+  SOSPECHOSOS.forEach(s=>{ if(s.id!==sid){ const id=s.id+'_'+cid; if((estado.tablero[key][id]||0)!==2){estado.tablero[key][id]=1;pintarCelda(key,id,1);} }});
+}
+function toggleAuto(){ estado.autox=document.getElementById('autox').checked; guardar(); }
+function limpiarTablero(){
+  estado.tablero={objetos:{},lugares:{}};
+  construirTabla('tabla-objetos',COLS_OBJ,'objetos');
+  construirTabla('tabla-lugares',COLS_LUG,'lugares');
+  guardar(); toast('Tablero reiniciado');
+}
+
+/* ============================================================
+   ACUSACIÓN
+   ============================================================ */
+function elegir(grupo,val){
+  estado.acusacion[grupo]=val;
+  document.querySelectorAll(`.opcion[data-g="${grupo}"]`).forEach(o=>o.classList.toggle('sel',o.dataset.v===val));
+  const a=estado.acusacion;
+  document.getElementById('btn-confirmar').disabled = !(a.culpable&&a.objeto&&a.lugar);
+  guardar();
+}
+function confirmarAcusacion(){
+  const a=estado.acusacion;
+  const ok = a.culpable===SOLUCION.culpable && a.objeto===SOLUCION.objeto && a.lugar===SOLUCION.lugar;
+  construirRevelacion(ok);
+  go('revelacion');
+}
+
+function nombreDe(grupo,id){
+  if(grupo==='culpable') return (SOSPECHOSOS.find(s=>s.id===id)||{}).n||'—';
+  if(grupo==='objeto') return (COLS_OBJ.find(s=>s.id===id)||{}).n||'—';
+  if(grupo==='lugar') return (COLS_LUG.find(s=>s.id===id)||{}).n||'—';
+}
+
+function construirRevelacion(ok){
+  const cont=document.getElementById('revel-cont');
+  if(ok){
+    cont.innerHTML=`
+      <div class="eyebrow reveal">Fase V · Revelación</div>
+      <h2 class="titulo-seccion reveal">Caso resuelto</h2>
+      <hr class="sep">
+      <div class="revel reveal">
+        <div class="revel-img"><img data-asset="mirador.jpg" alt="Mirador"></div>
+        <div class="revel-grad"></div>
+        <div class="revel-cont">
+          <div class="veredicto ok">Caso resuelto</div>
+          <div class="sep-corto"></div>
+          <div class="relato" style="max-width:60ch">
+            <p>La llave maestra no era solo una llave. Era la única forma de abrir el lugar donde todos juraban no haber estado.</p>
+            <p>Tomás bajó al arroyo. Vera calló una verdad de tres años atrás. Pero Emilia conocía cada puerta del lodge, cada sendero y cada silencio.</p>
+            <p>Matías no murió por perderse en la tormenta. Murió en el Mirador del Guatambú, durante un forcejeo con la única persona que podía abrir esa tranquera sin dejar rastro.</p>
+            <p>Emilia Rojas había protegido durante años la mentira sobre Lucía Ferreyra. Cuando Matías estuvo a punto de demostrarlo, lo citó al mismo lugar donde la verdad ya había caído una vez.</p>
+            <p class="voz">La selva no mintió. Solo esperó a que alguien escuchara.</p>
+          </div>
+          <div class="bloque-sec" style="border-top:1px solid var(--linea-fina);margin-top:22px;padding-top:18px">
+            <div class="lab" style="font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--rojo-claro);margin-bottom:8px">Qué ocurrió esa noche</div>
+            <p style="color:var(--hueso-tenue)">Matías no fue asesinado con un arma. Emilia lo citó en el mirador para impedir que publicara la investigación. Usó la llave maestra para abrir la tranquera secundaria, que debía permanecer cerrada durante la tormenta. Hubo un forcejeo por la carpeta y la grabadora sobre la madera mojada; Matías perdió el equilibrio y cayó hacia la quebrada. Emilia no pidió ayuda: regresó a recepción y fingió haber permanecido allí todo el tiempo.</p>
+          </div>
+          <div class="solucion-box">
+            <div class="sl"><span class="k">Culpable</span><span class="v">Emilia Rojas</span></div>
+            <div class="sl"><span class="k">Objeto clave</span><span class="v">Llave maestra</span></div>
+            <div class="sl"><span class="k">Lugar real del hecho</span><span class="v">Mirador del Guatambú</span></div>
+            <div class="sl"><span class="k">Qué ocurrió</span><span class="v" style="font-size:.98rem">Caída durante un forcejeo; Emilia lo encubrió como desaparición</span></div>
+          </div>
+          <div class="nav-acciones">
+            <button class="btn ghost" onclick="go('expediente')">Releer el expediente</button>
+            <button class="btn" onclick="reiniciar()">Cerrar y reiniciar</button>
+          </div>
+        </div>
+      </div>`;
+  } else {
+    const a=estado.acusacion;
+    cont.innerHTML=`
+      <div class="eyebrow reveal">Fase V · Revisión</div>
+      <h2 class="titulo-seccion reveal">La acusación no cierra</h2>
+      <hr class="sep">
+      <div class="revel reveal">
+        <div class="revel-img"><img data-asset="tranquera.jpg" alt="Tranquera"></div>
+        <div class="revel-grad"></div>
+        <div class="revel-cont">
+          <div class="veredicto no">No cierra</div>
+          <div class="sep-corto"></div>
+          <div class="relato" style="max-width:60ch">
+            <p>La acusación no cierra con las pruebas.</p>
+            <p>Hay algo que no encaja: una coartada mal leída, una puerta que solo podía abrirse con una llave, o una grabación que todavía no escuchaste con atención.</p>
+            <p class="voz">Volvé al tablero. La selva ya te dio la respuesta.</p>
+          </div>
+          <div class="solucion-box">
+            <div class="sl"><span class="k">Acusaste a</span><span class="v">${nombreDe('culpable',a.culpable)}</span></div>
+            <div class="sl"><span class="k">Objeto señalado</span><span class="v">${nombreDe('objeto',a.objeto)}</span></div>
+            <div class="sl"><span class="k">Lugar señalado</span><span class="v">${nombreDe('lugar',a.lugar)}</span></div>
+          </div>
+          <div class="nav-acciones">
+            <button class="btn rojo" onclick="go('tablero')">Volver a deducir</button>
+            <button class="btn ghost" onclick="go('evidencias')">Revisar evidencias</button>
+          </div>
+        </div>
+      </div>`;
+  }
+  cargarAssets();
+}
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+function animarReveal(){
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.scene.activa .reveal:not(.in)').forEach(el=>obs.observe(el));
+  // forzar primeros visibles
+  setTimeout(()=>document.querySelectorAll('.scene.activa .reveal').forEach(el=>{
+    const r=el.getBoundingClientRect(); if(r.top<window.innerHeight) el.classList.add('in');
+  }),60);
+}
+let toastTimer=null;
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function reiniciar(){
+  if(!confirm('¿Reiniciar el expediente? Se borrará tu progreso, el tablero y la acusación.')) return;
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  estado={modo:estado.modo,iniciado:false,seccion:"portada",leidas:[],maxFase:1,autox:false,
+    tablero:{objetos:{},lugares:{}},acusacion:{culpable:null,objeto:null,lugar:null}};
+  construir(); restaurarUI();
+  document.getElementById('topbar').classList.remove('visible');
+  cerrarMenu(); go('portada');
+}
+
+/* ============================================================
+   RESTAURAR ESTADO AL CARGAR
+   ============================================================ */
+function restaurarUI(){
+  document.getElementById('autox').checked=!!estado.autox;
+  // acusación
+  ['culpable','objeto','lugar'].forEach(g=>{ if(estado.acusacion[g]) elegir(g,estado.acusacion[g]); });
+  actualizarConteoEv();
+}
+
+/* ============================================================
+   ARRANQUE
+   ============================================================ */
+window.addEventListener('DOMContentLoaded',()=>{
+  cargar();
+  construir();
+  restaurarUI();
+  pintarFases(); pintarMenu();
+  // Reanudar donde quedó (si ya había iniciado)
+  if(estado.iniciado && estado.seccion && estado.seccion!=='portada' && estado.seccion!=='revelacion'){
+    go(estado.seccion);
+  } else {
+    go('portada');
+  }
+});
+
+// cerrar modal/menu con Escape
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){cerrarModal();cerrarMenu();} });
+</script>
+</body>
+</html>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
